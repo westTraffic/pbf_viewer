@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PBF Reader</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/index.css' %}">
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script src="{% static 'js/index.js' %}"></script>
+</head>
+
+<body>
+
+    <h3>PBF Reader</h3>
+    <form method="POST" enctype="multipart/form-data" action="{% url 'load_data' %}">
+        {% csrf_token %}
+
+        {% if error_message %}
+        <div class="alert alert-danger" role="alert">
+            {{error_message}}
+        </div>
+        {% endif %}
+        <!-- <div class="section">
+            <div class="alert alert-warning" role="alert">
+                The file must be stored under the folder which grants enough access to 'Everyone'.
+            </div>
+        </div> -->
+
+        <div class="section">
+            <div class="row">
+                <div class="col-2" style="font-weight: bold;">SELECT fields</div>
+                <div class="col-10">
+                    <div class="row">
+                        <div class="form-check">
+                            {{ form.highway }}
+                            <label class="form-check-label">Highway</label>
+                        </div>
+                        <div class="form-check">                            
+                            {{ form.maxspeed }}
+                            <label class="form-check-label">Max Speed</label>
+                        </div>
+                        <div class="form-check">
+                            {{ form.lane }}
+                            <label class="form-check-label">Lane</label>
+                        </div>
+                        <div class="form-check">
+                            {{ form.oneway }}
+                            <label class="form-check-label">Oneway</label>
+                        </div>
+                        <div class="form-check">
+                            {{ form.license }}
+                            <label class="form-check-label">License</label>
+                        </div>
+                    </div>
+                    <div class="row">
+                        {{ form.select_other }}                        
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="section">
+            <div class="row">
+                <div class="col-2" style="font-weight: bold;">Conditions</div>
+                <div class="col-10">
+                    <div class="row">
+                        <div class="col-3">
+                            <span class="condition_title">
+                                <label>Type</label>
+                            </span>
+                            <div style="display: block;">
+                                {% for radio in form.cond_type %}
+                                    {{ radio.tag }} {{ radio.choice_label }}
+                                {% endfor %}
+                            </div>
+                        </div>
+                        <div class="col-3">
+                            <span class="condition_title">
+                                <label>Oneway</label>
+                            </span>
+                            <div style="display: block;">
+                                {% for radio in form.cond_oneway %}
+                                    {{ radio.tag }} {{ radio.choice_label }}
+                                {% endfor %}
+                            </div>
+                        </div>
+                        <div class="col-3">
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-4">
+                            <span class="condition_title"><label>Amenity</label></span>
+                            {{ form.cond_amenity }}
+                        </div>
+                        <div class="col-4">
+                            <span class="condition_title"><label>Brand</label></span>
+                            {{ form.cond_brand }}
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-2">
+                            <span class="condition_title"><label>State</label></span>
+                            {{ form.cond_state }}
+                        </div>
+                        <div class="col-2">
+                            <span class="condition_title"><label>City</label></span>
+                            {{ form.cond_city }}
+                        </div>
+                        <div class="col-2">
+                            <span class="condition_title"><label>Street</label></span>
+                            {{ form.cond_street }}
+                        </div>
+                        <div class="col-2">
+                            <span class="condition_title"><label>Housenumber</label></span>
+                            {{ form.cond_housenumber }}
+                        </div>
+                        <div class="col-2">
+                            <span class="condition_title"><label>Postcode</label></span>
+                            {{ form.cond_postcode }}
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-10">
+                            <span class="condition_title"><label>Add conditions manually</label></span>
+                            {{ form.cond_others }}
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-2">
+                            <span class="condition_title"><label>Limit</label></span>
+                            {{ form.cond_limit }}
+                        </div>
+                        <div class="col-3">
+                            <br>
+                            <button type="submit" class="btn btn-primary" name="load">Load</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <h3>SQL</h3>
+        <div class="section">
+            <div class="row">
+                <div class="col-2" style="align-content: center;font-weight: bold;">SELECT</div>
+                <div class="col-10">
+                    {{ form.select_sql }}
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-2" style="align-content: center;font-weight: bold;">FROM</div>
+                <div class="col-10">
+                    {{ form.from_sql }}
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-2" style="align-content: center;font-weight: bold;">WHERE</div>
+                <div class="col-10">
+                    {{ form.where_sql }}
+                </div>
+            </div>
+        </div>
+    </form>
+
+    {% include 'pbf_viewer/loading.html' %}
+
+    {% if header %}
+    <h3>Results</h3>
+    <div class="section">
+        <table class="data">
+            <thead>
+                <tr>
+                    {% for col in header %}
+                    <th>{{ col }}</th>
+                    {% endfor %}
+                </tr>
+            </thead>
+            <tbody>
+                {% for row in data %}
+                <tr>
+                    {% for cell in row %}
+                    <td>{{ cell }}</td>
+                    {% endfor %}
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% endif %}
+
+</body>
+
+</html>
