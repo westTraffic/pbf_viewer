@@ -4,13 +4,6 @@ This project is a Django-based application.
 This web app could execute SQLs against PBFs directing using DuckDB python.
 Key select fields and condition fields are pre-set, and you can also add your statements.
 
-## Index
-
-- [Background](#Background)
-- [使い方](#使い方)
-- [ライセンス](#ライセンス)
-- [貢献](#貢献)
-
 ## Background
 
 Recently I bumped into a library DuckDB. From my local machine, I confirmed it is easy to execute SQLs towards my local PBF files.
