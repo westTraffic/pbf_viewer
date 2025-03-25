@@ -1,13 +1,11 @@
 # pbf_viewer
 
-This project is a Django-based application.
-This web app could execute SQLs against PBFs directing using DuckDB python.
-Key select fields and condition fields are pre-set, and you can also add your statements.
+This project is a Django-based application. This web app could execute SQLs against PBFs directing using DuckDB python.
 
 ## Background
 
 Recently I bumped into a library DuckDB. From my local machine, I confirmed it is easy to execute SQLs towards my local PBF files.
-I wanted to study how to build Python-Django app and also would like to help users who wish to see the PBF data easily.
+I just wanted to study how to build Python-Django app and also would like to help users who wish to see the PBF data easily.
 
 ## Installation Steps
 
